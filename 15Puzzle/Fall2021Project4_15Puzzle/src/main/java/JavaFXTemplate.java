@@ -42,7 +42,7 @@ public class JavaFXTemplate extends Application {
 		Scene welcomeScene = new Scene(welcomeBox);
 		welcomeScene.getRoot().setStyle("-fx-font-family: 'serif';"
 				+ "-fx-background-image:url(https://cdn.shopify.com/s/files/1/0572/8311/7249/files/1991_Start_1024x1024.png?v=1626712496)");
-		start.setOnAction(primaryStage.setScene(welcomeScene()));
+		start.setOnAction(primaryStage.setScene(puzzleScene()));
 
 		Thread t = new Thread(() -> {
 			A_IDS_A_15solver ids = new A_IDS_A_15solver();
@@ -89,11 +89,12 @@ public class JavaFXTemplate extends Application {
 		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';"
 				+ "-fx-background-image:url(https://www.nba.com/bulls/sites/bulls/files/1920-generic-bullhead_0.png)");
 
-		primaryStage.setScene(puzzleScene);
-		primaryStage.show();
-
+		// primaryStage.setScene(puzzleScene);
+		// primaryStage.show();
+		
 		// event handlers
 		exit.setOnAction(e -> System.exit(0));
+		return puzzleScene;
 	}
 
 	// public void resetGame(GridPane grid) {
