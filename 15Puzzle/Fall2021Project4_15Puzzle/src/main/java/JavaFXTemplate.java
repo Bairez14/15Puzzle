@@ -1,24 +1,32 @@
 import java.util.HashMap;
 import java.util.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.animation.PauseTransition;
 
 public class JavaFXTemplate extends Application {
 
 	public MenuItem AIH1, AIH2, exit, seeSolution, newGame;
-	Button start;
+	Text startGame;
 	public GridPane gp;
 	public Text moveNum;
 	//public HashMap<String, Scene> sceneMap;
@@ -33,10 +41,10 @@ public class JavaFXTemplate extends Application {
 	//feel free to remove the starter code from this method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		start = new Button("Start Game");
-		HBox welcomeBox = new HBox(start);
+		startGame = new Text("Welcome to 15 Puzzle");
+		HBox welcomeBox = new HBox();
 		welcomeBox.setAlignment(Pos.CENTER);
-		welcomeBox.getChildren().add(start);
+		welcomeBox.getChildren().add(startGame);
 		Scene welcomeScene = new Scene(welcomeBox,1000,1000);
 		welcomeScene.getRoot().setStyle("-fx-font-family: 'serif';"
 				+ "-fx-background-image:url(https://cdn.shopify.com/s/files/1/0572/8311/7249/files/1991_Start_1024x1024.png?v=1626712496)");
@@ -44,16 +52,17 @@ public class JavaFXTemplate extends Application {
 		primaryStage.setTitle("Welcome to 15 Puzzle");
 		primaryStage.setScene(welcomeScene);
 		primaryStage.show();
+		PauseTransition welcomePause = new PauseTransition(Duration.seconds(3));
+		welcomePause.setOnFinished(e->{
+			primaryStage.setScene(puzzleScene());
+		});
+
+		welcomePause.play();
+		
 		Thread t = new Thread(() -> {
 			A_IDS_A_15solver ids = new A_IDS_A_15solver();
 		});
 		t.start();
-		// VBox welcomeVB = new VBox();
-		// BackgroundImage bg = new BackgroundImage(new Image("welcome.jpg", 700, 700, false, true),
-		// 		BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-		// 		new BackgroundSize(1.0, 1.0, true, true, false, false));
-		// welcomeVB.setBackground(new Background(bg));
-
 	}
 
 	public void addGrid(GridPane grid) {
@@ -90,9 +99,14 @@ public class JavaFXTemplate extends Application {
 		gp.setVgap(10);
 		addGrid(gp);
 		HBox gameBox = new HBox(mBar, gp);
-		Scene puzzleScene = new Scene(gameBox, 700, 700);
-		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';"
-				+ "-fx-background-image:url(https://www.nba.com/bulls/sites/bulls/files/1920-generic-bullhead_0.png)");
+		Scene puzzleScene = new Scene(gameBox, 800, 800);
+		BackgroundImage bg = new BackgroundImage(new Image("https://www.nba.com/bulls/sites/bulls/files/1920-generic-bullhead_0.png", 800, 800,
+		false, true),
+		BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+		BackgroundPosition.DEFAULT,
+				new BackgroundSize(1.0, 1.0, true, true, false, false));
+		gameBox.setBackground(new Background(bg));
+		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';");
 
 		// primaryStage.setScene(puzzleScene);
 		// primaryStage.show();
