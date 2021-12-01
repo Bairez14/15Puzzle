@@ -33,21 +33,26 @@ public class JavaFXTemplate extends Application {
 	//feel free to remove the starter code from this method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Text welcome = new Text();
 		start = new Button("Start Game");
-		welcome.setText("Welcome to 15 Puzzle!");
-		welcome.setX(320);
-		welcome.setY(350);
-		HBox welcomeBox = new HBox(welcome, start);
-		Scene welcomeScene = new Scene(welcomeBox);
+		HBox welcomeBox = new HBox(start);
+		welcomeBox.setAlignment(Pos.CENTER);
+		welcomeBox.getChildren().add(start);
+		Scene welcomeScene = new Scene(welcomeBox,1000,1000);
 		welcomeScene.getRoot().setStyle("-fx-font-family: 'serif';"
 				+ "-fx-background-image:url(https://cdn.shopify.com/s/files/1/0572/8311/7249/files/1991_Start_1024x1024.png?v=1626712496)");
-		start.setOnAction(primaryStage.setScene(puzzleScene()));
-
+		//start.setOnAction(primaryStage.setScene(puzzleScene()));
+		primaryStage.setTitle("Welcome to 15 Puzzle");
+		primaryStage.setScene(welcomeScene);
+		primaryStage.show();
 		Thread t = new Thread(() -> {
 			A_IDS_A_15solver ids = new A_IDS_A_15solver();
 		});
 		t.start();
+		// VBox welcomeVB = new VBox();
+		// BackgroundImage bg = new BackgroundImage(new Image("welcome.jpg", 700, 700, false, true),
+		// 		BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+		// 		new BackgroundSize(1.0, 1.0, true, true, false, false));
+		// welcomeVB.setBackground(new Background(bg));
 
 	}
 
