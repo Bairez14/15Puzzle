@@ -1,4 +1,6 @@
 import java.util.HashMap;
+
+
 import java.util.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -8,6 +10,8 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -25,13 +29,18 @@ import javafx.animation.PauseTransition;
 
 public class JavaFXTemplate extends Application {
 
+	
+
 	public MenuItem AIH1, AIH2, exit, seeSolution, newGame;
 	Text startGame;
 	public GridPane gp;
 	public Text moveNum;
 	//public HashMap<String, Scene> sceneMap;
 	//public ObservableList<String> stats;
-	//public Button[][] buttons = new Button[4][4];
+	public ArrayList<Integer> buttons = new ArrayList<Integer>();
+	EventHandler<ActionEvent> buttonpress;
+
+	public static Button gameBoard[][] = new Button[4][4];
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -66,16 +75,29 @@ public class JavaFXTemplate extends Application {
 	}
 
 	public void addGrid(GridPane grid) {
-		for (int x = 0; x < 4; x++) { // column
-			for (int i = 0; i < 4; i++) { // row
-				Button b1 = new Button();
-				// buttons[x][i] = b1; // populates buttons to 2d array of buttons
+		buttons = PuzzleLogic.generatePuzzle();
+		int index = 0;
+		for (int x = 0; x < 4; x++) { // row
+			for (int i = 0; i < 4; i++) { // collumn
+				Button b1 = new Button(Integer.toString(buttons.get(index)));
+				gameBoard[x][i] = b1;
 				b1.setPrefSize(90, 90);
-				b1.setStyle("-fx-background-color: transparent;" + "-fx-border-color: white;");
-				grid.add(b1, x, i); // adding buttons to grid
+				//b1.setOnAction(buttonpress);
+				b1.setOnAction(e->{
+					System.out.println("validMove: " + PuzzleLogic.validMove(b1, gameBoard));
+					if(PuzzleLogic.validMove(b1, gameBoard)){
+						PuzzleLogic.swap(b1, gameBoard);
+					}
+				});
+				b1.setStyle(
+						"-fx-background-color: white;" + "-fx-border-color: white;" + "-fx-text-color: yellow;");
+				grid.add(b1, i, x); // adding buttons to grid
+				index++;
 			}
 		}
 	}
+
+	
 
 	public Scene puzzleScene() {
 		gp = new GridPane();
@@ -99,8 +121,8 @@ public class JavaFXTemplate extends Application {
 		gp.setVgap(10);
 		addGrid(gp);
 		HBox gameBox = new HBox(mBar, gp);
-		Scene puzzleScene = new Scene(gameBox, 800, 800);
-		BackgroundImage bg = new BackgroundImage(new Image("https://www.nba.com/bulls/sites/bulls/files/1920-generic-bullhead_0.png", 800, 800,
+		Scene puzzleScene = new Scene(gameBox, 850, 850);
+		BackgroundImage bg = new BackgroundImage(new Image("https://www.nba.com/bulls/sites/bulls/files/1920-generic-bullhead_0.png", 850, 850,
 		false, true),
 		BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 		BackgroundPosition.DEFAULT,
@@ -108,11 +130,28 @@ public class JavaFXTemplate extends Application {
 		gameBox.setBackground(new Background(bg));
 		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';");
 
+		buttonpress = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Button b = (Button)e.getSource();
+				if(PuzzleLogic.validMove(b, gameBoard)){
+					PuzzleLogic.swap(b, gameBoard);
+				}
+			}			
+		};
+
 		// primaryStage.setScene(puzzleScene);
 		// primaryStage.show();
 		
 		// event handlers
 		exit.setOnAction(e -> System.exit(0));
+
+		
+		// event handler for valid move
+		// inside eventhandler
+		// call another funct
+		// swap if valid move == true;
 		return puzzleScene;
 	}
 
