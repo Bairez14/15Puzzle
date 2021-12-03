@@ -37,10 +37,11 @@ public class JavaFXTemplate extends Application {
 	public Text moveNum;
 	//public HashMap<String, Scene> sceneMap;
 	//public ObservableList<String> stats;
+	//public Integer[] buttons = new Integer[15];
 	public ArrayList<Integer> buttons = new ArrayList<Integer>();
 	EventHandler<ActionEvent> buttonpress;
 
-	public static Button gameBoard[][] = new Button[4][4];
+	//public static Button gameBoard[][] = new Button[4][4];
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -77,23 +78,26 @@ public class JavaFXTemplate extends Application {
 	public void addGrid(GridPane grid) {
 		buttons = PuzzleLogic.generatePuzzle();
 		int index = 0;
-		for (int x = 0; x < 4; x++) { // row
-			for (int i = 0; i < 4; i++) { // collumn
-				Button b1 = new Button(Integer.toString(buttons.get(index)));
-				gameBoard[x][i] = b1;
-				b1.setPrefSize(90, 90);
-				//b1.setOnAction(buttonpress);
-				b1.setOnAction(e->{
-					System.out.println("validMove: " + PuzzleLogic.validMove(b1, gameBoard));
-					if(PuzzleLogic.validMove(b1, gameBoard)){
-						PuzzleLogic.swap(b1, gameBoard);
+		for (int i = 0; i < 15; i++) { // collumn
+			Button b1 = new Button(Integer.toString(buttons.get(index)));
+			//gameBoard[x][i] = b1;
+			b1.setPrefSize(90, 90);
+			//b1.setOnAction(buttonpress);
+			b1.setOnAction(e->{
+				int xbutton = grid.getColumnIndex(b1);
+				int ybutton = grid.getRowIndex(b1);
+				if (PuzzleLogic.validMove(xbutton, ybutton, buttons)) {
+					PuzzleLogic.swap(b1, buttons);
+					if (PuzzleLogic.winningMove(buttons)) {
+						// go to winner scene or let the user know they won
 					}
-				});
-				b1.setStyle(
-						"-fx-background-color: white;" + "-fx-border-color: white;" + "-fx-text-color: yellow;");
-				grid.add(b1, i, x); // adding buttons to grid
-				index++;
-			}
+				}
+			});
+			b1.setStyle(
+					"-fx-background-color: white;" + "-fx-border-color: white;" + "-fx-text-color: yellow;");
+			grid.add(b1, i, x); // a bit confused, not sure how to go about this
+			// we are supposed to place this button in the gridpane but we are only using a 1D array....
+			index++;
 		}
 	}
 
@@ -130,16 +134,16 @@ public class JavaFXTemplate extends Application {
 		gameBox.setBackground(new Background(bg));
 		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';");
 
-		buttonpress = new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Button b = (Button)e.getSource();
-				if(PuzzleLogic.validMove(b, gameBoard)){
-					PuzzleLogic.swap(b, gameBoard);
-				}
-			}			
-		};
+		// buttonpress = new EventHandler<ActionEvent>() {
+		// 	@Override
+		// 	public void handle(ActionEvent e) {
+		// 		// TODO Auto-generated method stub
+		// 		Button b = (Button)e.getSource();
+		// 		if(PuzzleLogic.validMove(b, gameBoard)){
+		// 			PuzzleLogic.swap(b, gameBoard);
+		// 		}
+		// 	}			
+		// };
 
 		// primaryStage.setScene(puzzleScene);
 		// primaryStage.show();
