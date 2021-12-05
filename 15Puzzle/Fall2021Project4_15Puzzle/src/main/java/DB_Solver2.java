@@ -13,15 +13,15 @@ public class DB_Solver2 {
 	 * Copyright© 2014, Mark Hallenbeck, All Rights Reservered.
 	 */
 		
-		private ArrayList<Node> queue;					//queue of states to expand
+		private ArrayList<Puzzle> queue;					//queue of states to expand
 		private int[] goalState = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};	//goal state used for comparison
-		private Node firstState;						//initial state of puzzle
-		private Node solutionNode;						//node contains the solution state and parent
-		private Hashtable<String, Node> hash;			//used to keep track of visited states
+		private Puzzle firstState;						//initial state of puzzle
+		private Puzzle solutionNode;						//node contains the solution state and parent
+		private Hashtable<String, Puzzle> hash;			//used to keep track of visited states
 		private String whichHeuristic;					//the heuristic to be used
 		
 		
-		public DB_Solver2(Node startState, String heuristic){
+		public DB_Solver2(Puzzle startState, String heuristic){
 			
 			whichHeuristic = heuristic;					//which heuristic to use
 			
@@ -33,9 +33,9 @@ public class DB_Solver2 {
 			}
 			
 			firstState = startState;					//the start state
-			queue = new ArrayList<Node>();				//initialize the queue
+			queue = new ArrayList<Puzzle>();				//initialize the queue
 			queue.add(startState);						//add the startState node to the queue
-			hash = new Hashtable<String, Node>();
+			hash = new Hashtable<String, Puzzle>();
 			hash.put(startState.getKey2(), startState);		//add the startState node to the hashtable
 		}
 		
@@ -44,7 +44,7 @@ public class DB_Solver2 {
 		 * This version does keep a hash table of states seen so there will be no repeated states in the queue
 		 * @return node with the solution or null(no solution found)
 		 */
-		public Node findSolutionPath(){
+		public Puzzle findSolutionPath(){
 			
 			//checking to see if the puzzle entered in by the user is valid
 			int[] checkArray = copyArray(firstState.getKey());
@@ -73,7 +73,7 @@ public class DB_Solver2 {
 			
 			while(!queue.isEmpty()){			//if queue is empty, I have explored all options
 				
-				Node current = queue.get(0);	//get top node off the queue
+				Puzzle current = queue.get(0);	//get top node off the queue
 				queue.remove(0);				//remove it from the queue
 				
 				//System.out.println("Popping node with hVal: "+current.get_hValue());
@@ -122,9 +122,9 @@ public class DB_Solver2 {
 		 * @param finalState
 		 * @return arrayList of nodes that represent the path to a solution
 		 */
-		public ArrayList<Node> getSolutionPath(Node finalState){
+		public ArrayList<Puzzle> getSolutionPath(Puzzle finalState){
 			
-			ArrayList<Node> solutionPath = new ArrayList<Node>();
+			ArrayList<Puzzle> solutionPath = new ArrayList<Puzzle>();
 			
 			while(finalState != null)
 			{
@@ -333,7 +333,7 @@ public class DB_Solver2 {
 			
 			int hVal = 0;
 			
-			Node newNode = new Node(newArray);					//make a new node with rightArray as key 
+			Puzzle newNode = new Puzzle(newArray);					//make a new node with rightArray as key 
 			
 			if(whichHeuristic == "heuristicOne"){				//get the proper heuristic for the state
 				//System.out.println("heuristicOne");
@@ -383,7 +383,7 @@ public class DB_Solver2 {
 		 */
 		public void addSolutionState(int[] newArray, int[] puzzleArray){
 			
-			Node newNode = new Node(newArray);					//make a new node with rightArray as key 
+			Puzzle newNode = new Puzzle(newArray);					//make a new node with rightArray as key 
 			newNode.setParent(hash.get(Arrays.toString(puzzleArray)));				//set parent in new node
 			hash.put(Arrays.toString(newArray), newNode);								//add node to hashtable
 			

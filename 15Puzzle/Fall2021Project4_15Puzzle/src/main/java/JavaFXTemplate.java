@@ -40,10 +40,10 @@ public class JavaFXTemplate extends Application {
 	public Text moveNum;
 	//public HashMap<String, Scene> sceneMap;
 	//public ObservableList<String> stats;
-	//public Integer[] buttons = new Integer[15];
+	//public int[] buttons = new int[15];
 	public ArrayList<Integer> buttons = new ArrayList<Integer>();
 	EventHandler<ActionEvent> buttonpress;
-	ArrayList<Node> sol ;
+	ArrayList<Puzzle> sol ;
 
 	//public static Button gameBoard[][] = new Button[4][4];
 
@@ -153,7 +153,7 @@ public class JavaFXTemplate extends Application {
 			ExecutorService ex = Executors.newFixedThreadPool(1);
 			ex.submit(()->{
 				ExecutorService ex2 = Executors.newFixedThreadPool(1);
-				Future<ArrayList<Node>> future = ex2.submit(new PuzzleCall(buttons,"heuristicOne"));
+				Future<ArrayList<Puzzle>> future = ex2.submit(new PuzzleCall(buttons,"heuristicOne"));
 				//Node class vs java.util.scene.Node import
 				try{
 					sol = future.get();

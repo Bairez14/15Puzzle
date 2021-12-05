@@ -5,15 +5,15 @@ import java.util.Arrays;
  * Copyright© 2014, Mark Hallenbeck, All Rights Reservered.
  */
 
-public class Node {
+public class Puzzle {
 
 	private int[] key;					
 	private String key2;				
-	private Node parent;
+	private Puzzle parent;
 	private int depth;
 	private int hValue;
 	
-	public Node(int[] puzzle){
+	public Puzzle(int[] puzzle){
 		key = puzzle;
 		key2 = Arrays.toString(key);
 		parent = null;
@@ -27,11 +27,11 @@ public class Node {
 		return key2;
 	}
 	
-	public Node getParent(){
+	public Puzzle getParent(){
 		return parent;
 	}
 	
-	public void setParent(Node from){
+	public void setParent(Puzzle from){
 		parent = from;
 	}
 

@@ -1,7 +1,7 @@
 import java.util.concurrent.Callable;
 import java.util.ArrayList;
 
-public class PuzzleCall implements Callable<ArrayList<Node>> {
+public class PuzzleCall implements Callable<ArrayList<Puzzle>> {
 
     public ArrayList<Integer> puzzleState = new ArrayList<Integer>();
     public String heuristic; 
@@ -12,15 +12,15 @@ public class PuzzleCall implements Callable<ArrayList<Node>> {
     }
 
     @Override
-    public ArrayList<Node> call() throws Exception {
-        ArrayList<Node> solution;
+    public ArrayList<Puzzle> call() throws Exception {
+        ArrayList<Puzzle> solution;
 
         int [] puzzle = puzzleState.stream().mapToInt(i -> i).toArray();
         // ^^ need to convert ArrayList to int [] becuase that is the parameter the Node constructor takes in
         //https://stackoverflow.com/questions/718554/how-to-convert-an-arraylist-containing-integers-to-primitive-int-array
         //probably can look up another way to do it tho 
         
-        Node startState = new Node(puzzle); //A_Star takes in a node in constructor so need to make a node with puzzle which is an int[]
+        Puzzle startState = new Puzzle(puzzle); //A_Star takes in a node in constructor so need to make a node with puzzle which is an int[]
         A_IDS_A_15solver ids = new A_IDS_A_15solver(); // instantiates instance of IDS class
         solution = ids.A_Star(startState, heuristic); // call method to A_Star
 
