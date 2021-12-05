@@ -269,7 +269,7 @@ public class DB_Solver2 {
 			{
 				if(hash.containsKey(Arrays.toString(upArray))){		//check if the key exists in hashtable, if yes, return
 					
-			//		System.out.println("********************already hashed*******************");
+					//System.out.println("********************already hashed*******************");
 					return false;
 				}
 				else

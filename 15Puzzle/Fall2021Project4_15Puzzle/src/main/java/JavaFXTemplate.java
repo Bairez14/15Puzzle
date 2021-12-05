@@ -1,6 +1,8 @@
-import java.util.HashMap;
-
-
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -21,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.util.Duration;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -40,6 +43,7 @@ public class JavaFXTemplate extends Application {
 	//public Integer[] buttons = new Integer[15];
 	public ArrayList<Integer> buttons = new ArrayList<Integer>();
 	EventHandler<ActionEvent> buttonpress;
+	ArrayList<Node> sol ;
 
 	//public static Button gameBoard[][] = new Button[4][4];
 
@@ -78,26 +82,35 @@ public class JavaFXTemplate extends Application {
 	public void addGrid(GridPane grid) {
 		buttons = PuzzleLogic.generatePuzzle();
 		int index = 0;
-		for (int i = 0; i < 15; i++) { // collumn
-			Button b1 = new Button(Integer.toString(buttons.get(index)));
-			//gameBoard[x][i] = b1;
-			b1.setPrefSize(90, 90);
-			//b1.setOnAction(buttonpress);
-			b1.setOnAction(e->{
-				int xbutton = grid.getColumnIndex(b1);
-				int ybutton = grid.getRowIndex(b1);
-				if (PuzzleLogic.validMove(xbutton, ybutton, buttons)) {
-					PuzzleLogic.swap(b1, buttons);
-					if (PuzzleLogic.winningMove(buttons)) {
-						// go to winner scene or let the user know they won
+		for(int r = 0;  r < 4 ; r++) { //row
+			for (int i = 0; i < 4; i++) { // collumn
+				Button b1 = new Button(Integer.toString(buttons.get(index)));
+				//gameBoard[x][i] = b1;
+				b1.setPrefSize(90, 90);
+				//b1.setOnAction(buttonpress);
+				b1.setOnAction(e->{
+					int xbutton = GridPane.getColumnIndex(b1);
+					int ybutton = GridPane.getRowIndex(b1);
+					if (PuzzleLogic.validMove(xbutton, ybutton, buttons)) {
+						PuzzleLogic.swap(b1, buttons);
+						ObservableList<Node> gameButtons = grid.getChildren();
+						for (Node node: gameButtons) {
+							Button b = (Button) node;
+							if (b.getText().equals("0")) {
+								b.setText(b1.getText());
+							}
+						}
+						b1.setText("0");
+						if (PuzzleLogic.winningMove(buttons)) {
+							// go to winner scene or let the user know they won
+						}
 					}
-				}
-			});
-			b1.setStyle(
-					"-fx-background-color: white;" + "-fx-border-color: white;" + "-fx-text-color: yellow;");
-			grid.add(b1, i, x); // a bit confused, not sure how to go about this
-			// we are supposed to place this button in the gridpane but we are only using a 1D array....
-			index++;
+				});
+				b1.setStyle("-fx-text-color: black;" + "-fx-background-color: white;" + "-fx-border-color: white;" + "-fx-font-size:35;" );
+				grid.add(b1, i, r); // a bit confused, not sure how to go about this
+				// we are supposed to place this button in the gridpane but we are only using a 1D array....
+				index++;
+			}
 		}
 	}
 
@@ -133,29 +146,38 @@ public class JavaFXTemplate extends Application {
 				new BackgroundSize(1.0, 1.0, true, true, false, false));
 		gameBox.setBackground(new Background(bg));
 		puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';");
-
-		// buttonpress = new EventHandler<ActionEvent>() {
-		// 	@Override
-		// 	public void handle(ActionEvent e) {
-		// 		// TODO Auto-generated method stub
-		// 		Button b = (Button)e.getSource();
-		// 		if(PuzzleLogic.validMove(b, gameBoard)){
-		// 			PuzzleLogic.swap(b, gameBoard);
-		// 		}
-		// 	}			
-		// };
-
-		// primaryStage.setScene(puzzleScene);
-		// primaryStage.show();
 		
 		// event handlers
 		exit.setOnAction(e -> System.exit(0));
+		AIH1.setOnAction(e -> {
+			ExecutorService ex = Executors.newFixedThreadPool(1);
+			ex.submit(()->{
+				ExecutorService ex2 = Executors.newFixedThreadPool(1);
+				Future<ArrayList<Node>> future = ex2.submit(new PuzzleCall(buttons,"heuristicOne"));
+				//Node class vs java.util.scene.Node import
+				try{
+					sol = future.get();
 
+				}catch(ExecutionException e1){
+					e1.printStackTrace();
+				}catch(CancellationException e2){
+					e2.printStackTrace();
+				}catch(InterruptedException e3){
+					e3.printStackTrace();
+				}
+			});
+			
+			// try{
+
+			// }catch(ExecutionException e){
+			// 	e.printStackTrace();
+			// }
+
+		});
+		AIH2.setOnAction(e -> {
+
+		});
 		
-		// event handler for valid move
-		// inside eventhandler
-		// call another funct
-		// swap if valid move == true;
 		return puzzleScene;
 	}
 
@@ -168,39 +190,3 @@ public class JavaFXTemplate extends Application {
 	// 	}
 	// }
 }
-
-	// public Scene gamePlayScene() {
-	// 	//gp = new GridPane();
-	// 	// setting up menubar
-	// 	// MenuBar mBar = new MenuBar();
-	// 	// Menu hMenu = new Menu("Heuristics");
-	// 	// AIH1 = new MenuItem("Heuristic 1");
-	// 	// AIH2 = new MenuItem("Heurostic 2");
-	// 	// hMenu.getItems().addAll(AIH1,AIH2);
-	// 	// Menu settingMenu = new Menu("Settings");
-	// 	// exit = new MenuItem("Exit");
-	// 	// newGame = new MenuItem("Reset");
-	// 	// settingMenu.getItems().addAll(exit,newGame);
-	// 	// Menu solutionMenu = new Menu("Help");
-	// 	// seeSolution = new MenuItem("Solution");
-	// 	// solutionMenu.getItems().add(seeSolution);
-	// 	// mBar.getMenus().addAll(hMenu,settingMenu, solutionMenu);
-	// 	start = new Button("Start Game");
-	// 	//creating grid
-	// 	// gp.setAlignment(Pos.CENTER);
-	// 	// gp.setHgap(10);
-	// 	// gp.setVgap(10);
-	// 	// addGrid(gp);
-	// 	HBox gameBox = new HBox(start);
-	// 	Scene puzzleScene = new Scene(gameBox,700, 700);
-	// 	// puzzleScene.getRoot().setStyle("-fx-font-family: 'serif';"
-	// 	// 		+ "-fx-background-image: url(https://cdn.vox-cdn.com/thumbor/rh4HfDnP3aSyhDNC6wrRhqiYZzc=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19246117/tyler_parker_5_guys_bulls_alyceatinoyan.jpg);");
-	// 	// sceneMap.put("puzzleScene", puzzleScene);
-	// 	return puzzleScene;
-	// }
-
-	// public Scene winScene(Stage primaryStage) {
-	// 	return null;
-	// }
-
-

@@ -57,31 +57,36 @@ public class PuzzleLogic {
     }
 
     public static boolean validMove(int xcord, int ycord, ArrayList<Integer> buttons) {
-        System.out.println("in validMove method");
+        
         // finding the position of the current button pressed in a 1D array
         int index = (4 * ycord) + xcord;
-
+        
         if (xcord != 0 && buttons.get(index - 1) == 0) { //left
+            System.out.println("valid move");
             return true;
         }
         if (xcord != 3 && buttons.get(index + 1) == 0) { //right
+            System.out.println("valid move");
             return true;
         }
         if (ycord != 0 && buttons.get(index - 4) == 0) {//up
+            System.out.println("valid move");
             return true;
         }
         if (ycord != 3 && buttons.get(index + 4) == 0) {//down
+            System.out.println("valid move");
             return true;
         }
-
+        System.out.println("invalid move");
         return false;
     }
     // use the swap method using a button and zero
     public static void swap(Button b, ArrayList<Integer> buttons) {
         int i = Integer.parseInt(b.getText());
-        Collections.swap(buttons, 0, i); 
-
+        Collections.swap(buttons, buttons.indexOf(0), buttons.indexOf(i)); 
+        //Collections.swap(buttons, game.indexOf(0), buttons.indexOf(i)); 
     }
+    
     // returns true if the array is in order from least to greatest
     // meaning the puzzle is solved and is valid
     public static boolean winningMove(ArrayList<Integer> buttons) {
