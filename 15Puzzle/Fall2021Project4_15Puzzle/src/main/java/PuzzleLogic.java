@@ -30,7 +30,6 @@ public class PuzzleLogic {
     public static Integer xCord; //x-coordinate of 0
     public static Integer yCord; // y-coordinate of 0
 
-// MOST OF THE OLD CODE IS AT THE BOTTOM, I JUST STARTED CLEAN BECAUSE I CONCENTRATE BETTER LOLLLL
 
     public static ArrayList<Integer> generatePuzzle() {
         // adds puzzles to arraylist
@@ -97,66 +96,8 @@ public class PuzzleLogic {
         }
         return true;
     }
+
+    public static void updatePuzzle(ArrayList<Integer> puzzle) {
+        game = puzzle;
+    }
 }
-
-//NOTES FOR CALLABLE CLASS
-//need class to implement callable
-//contain call method uses solver and returns solution so in javafx submit that method to use future.get() to get answer from
-
-//valid move function
-//iterate through list and compare to button
-// for (int i = 0; i < pressable.size(); i++) {
-//     System.out.println(pressable.get(i));
-//     if (b.getText().equals(pressable.get(i))) {
-//         return true;
-//     }
-// }
-// return false;
-
-// ---------------------------------
-//     public static void swap(Button b, Integer[] buttons) {
-// System.out.println("in swap method");
-
-// int bx = 0; //x-coordinate of button being pressed
-// int by = 0; //y-coordinate of button being pressed
-// for (int c = 0; c < 4; c++) {
-//     for (int r = 0; r < 4; r++) {
-//         if (buttons[c][r].getText().equals(b.getText())) {
-//             bx = c;
-//             by = r;
-//         }
-//     }
-// for(
-
-// int c = 0;c<4;c++){// row
-// for(
-// int r = 0;r<4;r++)
-// { // column
-//     System.out.println(buttons[c][r].getText());
-
-// }}
-
-// Button zeroPrev = buttons[xCord][yCord];
-// String buttontext = b
-//         .getText();buttons[xCord][yCord].setText(buttontext);
-//buttons[bx][by].setText("0");
-//buttons[xCord][yCord]=b;
-//xCord=bx; // setting
-//                                                                                                                             // 0
-//                                                                                                                             // xcoordinate
-//                                                                                                                             // to
-//                                                                                                                             // button
-//                                                                                                                             // pressed
-//                                                                                                                             // x
-                                                                                                                        // cord
-// yCord=by;buttons[bx][by]=zeroPrev; // swaps
-
-// System.out.println("after swap zero @ "+"("+xCord+", "+yCord+")");for(
-// int c = 0;c<4;c++)
-// {//row
-//             for (int r = 0; r < 4; r++) { //column
-//                 System.out.println(buttons[c][r].getText());
-
-//             }
-//         }
-// }
